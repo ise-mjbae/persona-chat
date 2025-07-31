@@ -4,7 +4,7 @@ import { useLocalStorage } from './useLocalStorage';
 
 export const useLearnings = () => {
   const [learnings, setLearnings] = useLocalStorage<Learning[]>('learnings', []);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const createLearning = useCallback((learningData: Omit<Learning, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newLearning: Learning = {

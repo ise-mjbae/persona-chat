@@ -4,7 +4,7 @@ import { useLocalStorage } from './useLocalStorage';
 
 export const usePersonas = () => {
   const [personas, setPersonas] = useLocalStorage<Persona[]>('personas', []);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const createPersona = useCallback((personaData: Omit<Persona, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newPersona: Persona = {

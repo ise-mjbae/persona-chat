@@ -35,9 +35,9 @@ const LearningPage: React.FC = () => {
     setIsInChat(false);
   };
 
-  const getPersonaName = (personaId: string) => {
-    return personas.find(p => p.id === personaId)?.name || '알 수 없음';
-  };
+  // const getPersonaName = (personaId: string) => {
+  //   return personas.find(p => p.id === personaId)?.name || '알 수 없음';
+  // };
 
   const getAvailablePersonas = (learning: Learning) => {
     return learning.connectedPersonas

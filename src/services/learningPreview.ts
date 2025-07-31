@@ -1,4 +1,4 @@
-import { ChatMessage, Persona, PersonaCondition } from '../types';
+import { ChatMessage, Persona } from '../types';
 
 export const generatePreviewChat = async (
   openaiKey: string,

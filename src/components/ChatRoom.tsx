@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Learning, Persona, Message, ConversationHistory, VOICE_ACTORS } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Settings } from '../types';
-import { callOpenAI, getEmotionTone } from '../services/openai';
+import { getEmotionTone } from '../services/openai';
 import { generateAndPlayAudio } from '../services/typecast';
 
 interface ChatRoomProps {
@@ -50,7 +50,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ learning, persona, onBack }) => {
     setMessages(prev => [...prev, message]);
   };
 
-  const updateStatus = (message: string, speaking = false) => {
+  const updateStatus = (message: string) => {
     setStatus(message);
   };
 
@@ -122,7 +122,7 @@ ${learning.content}
       const aiResponse = data.choices[0].message.content;
       addMessage(aiResponse, false);
       
-      const updatedHistory = [...newHistory, { role: 'assistant', content: aiResponse }];
+      const updatedHistory: ConversationHistory[] = [...newHistory, { role: 'assistant', content: aiResponse }];
       setConversationHistory(updatedHistory);
       
       updateStatus('음성을 생성중입니다...');

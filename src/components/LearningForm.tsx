@@ -96,9 +96,9 @@ const LearningForm: React.FC<LearningFormProps> = ({ learning, onSave, onCancel 
     }));
   };
 
-  const getPersonaName = (personaId: string) => {
-    return personas.find(p => p.id === personaId)?.name || '알 수 없음';
-  };
+  // const getPersonaName = (personaId: string) => {
+  //   return personas.find(p => p.id === personaId)?.name || '알 수 없음';
+  // };
 
   return (
     <div className="modal-overlay">

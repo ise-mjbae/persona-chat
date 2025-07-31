@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Persona, VOICE_ACTORS, AGE_GROUPS, PERSONALITY_TYPES } from '../types';
+import { Persona, VOICE_ACTORS, AGE_GROUPS, PERSONALITY_TYPES, Gender, AgeGroup, PersonalityType } from '../types';
 
 interface PersonaFormProps {
   persona?: Persona;
@@ -10,9 +10,9 @@ interface PersonaFormProps {
 const PersonaForm: React.FC<PersonaFormProps> = ({ persona, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     name: '',
-    gender: '남성' as const,
-    ageGroup: '20대 초반' as const,
-    personalityType: '신중한 고객' as const,
+    gender: '남성' as Gender,
+    ageGroup: '20대 초반' as AgeGroup,
+    personalityType: '신중한 고객' as PersonalityType,
     additionalTraits: '',
     voiceActorId: VOICE_ACTORS[0].id,
     tempo: 1,

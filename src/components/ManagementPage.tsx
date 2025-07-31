@@ -90,7 +90,7 @@ const ManagementPage: React.FC = () => {
         }
       }
 
-      updateGeneratedChat(learningId, '', generatedChats);
+      // updateGeneratedChat(learningId, '', generatedChats);
       updateLearning(learningId, { generatedChats });
       
       // 첫 번째 페르소나를 활성 탭으로 설정
@@ -122,7 +122,7 @@ const ManagementPage: React.FC = () => {
     return personas.find(p => p.id === personaId)?.name || '알 수 없음';
   };
 
-  const previewingLearning = previewLearning ? learnings.find(l => l.id === previewLearning) : null;
+  // const previewingLearning = previewLearning ? learnings.find(l => l.id === previewLearning) : null;
 
   return (
     <div className="page-container">
