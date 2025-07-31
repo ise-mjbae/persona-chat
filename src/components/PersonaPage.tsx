@@ -66,7 +66,17 @@ const PersonaPage: React.FC = () => {
             {personas.map(persona => (
               <div key={persona.id} className="persona-card">
                 <div className="persona-header">
-                  <h3>{persona.name}</h3>
+                  <div className="persona-avatar">
+                    {persona.name.charAt(0)}
+                  </div>
+                  <div className="persona-title-section">
+                    <h3>{persona.name}</h3>
+                    <div className="persona-subtitle">
+                      <span className="persona-badge">{persona.gender}</span>
+                      <span className="persona-badge">{persona.ageGroup}</span>
+                      <span className="persona-badge">{persona.personalityType}</span>
+                    </div>
+                  </div>
                   <div className="persona-actions">
                     <button 
                       className="btn-icon" 
@@ -87,31 +97,19 @@ const PersonaPage: React.FC = () => {
                 
                 <div className="persona-info">
                   <div className="info-row">
-                    <span className="label">성별:</span>
-                    <span>{persona.gender}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">연령대:</span>
-                    <span>{persona.ageGroup}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">성향:</span>
-                    <span>{persona.personalityType}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">목소리:</span>
+                    <span className="label">목소리</span>
                     <span>{getVoiceActorName(persona.voiceActorId)}</span>
                   </div>
                   {persona.additionalTraits && (
                     <div className="info-row">
-                      <span className="label">특징:</span>
+                      <span className="label">특징</span>
                       <span className="traits">{persona.additionalTraits}</span>
                     </div>
                   )}
                 </div>
                 
                 <div className="persona-footer">
-                  <small>생성: {persona.createdAt.toLocaleDateString()}</small>
+                  <small>생성: {persona.createdAt instanceof Date ? persona.createdAt.toLocaleDateString() : new Date(persona.createdAt).toLocaleDateString()}</small>
                 </div>
               </div>
             ))}

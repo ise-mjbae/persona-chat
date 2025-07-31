@@ -4,7 +4,19 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (item) {
+        const parsed = JSON.parse(item);
+        // Date 문자열을 Date 객체로 변환
+        if (Array.isArray(parsed)) {
+          return parsed.map(item => ({
+            ...item,
+            createdAt: item.createdAt ? new Date(item.createdAt) : undefined,
+            updatedAt: item.updatedAt ? new Date(item.updatedAt) : undefined
+          })) as T;
+        }
+        return parsed;
+      }
+      return initialValue;
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
       return initialValue;
