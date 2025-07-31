@@ -35,7 +35,8 @@ export const callOpenAI = async (
 export const getEmotionTone = async (
   apiKey: string,
   aiResponse: string,
-  conversationHistory: ConversationHistory[]
+  conversationHistory: ConversationHistory[],
+  supportedTones: string[] = ['normal-1', 'happy-1', 'sad-1', 'angry-1']
 ): Promise<string> => {
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -49,7 +50,7 @@ export const getEmotionTone = async (
         messages: [
           {
             role: 'system',
-            content: '다음 텍스트의 감정을 분석하여 음성 생성에 적합한 감정톤을 선택해주세요. 다음 중 하나만 선택하세요: normal-1, happy-1, sad-1, angry-1. 답변은 선택한 감정톤만 출력하세요.'
+            content: `다음 텍스트의 감정을 분석하여 음성 생성에 적합한 감정톤을 선택해주세요. 다음 중 하나만 선택하세요: ${supportedTones.join(', ')}. 답변은 선택한 감정톤만 출력하세요.`
           },
           {
             role: 'user',
@@ -64,11 +65,10 @@ export const getEmotionTone = async (
     if (response.ok) {
       const data = await response.json();
       const selectedTone = data.choices[0].message.content.trim();
-      const validTones = ['normal-1', 'happy-1', 'sad-1', 'angry-1'];
-      return validTones.includes(selectedTone) ? selectedTone : 'normal-1';
+      return supportedTones.includes(selectedTone) ? selectedTone : supportedTones[0];
     }
   } catch (error) {
     console.error('감정톤 분석 오류:', error);
   }
-  return 'normal-1';
+  return supportedTones[0];
 };

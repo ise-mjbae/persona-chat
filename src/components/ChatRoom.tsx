@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Learning, Persona, Message, ConversationHistory } from '../types';
+import { Learning, Persona, Message, ConversationHistory, VOICE_ACTORS } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Settings } from '../types';
 import { callOpenAI, getEmotionTone } from '../services/openai';
@@ -128,11 +128,20 @@ ${learning.content}
       updateStatus('음성을 생성중입니다...');
       setIsSpeaking(true);
       
+      // 해당 페르소나의 지원 감정톤 목록 가져오기
+      const voiceActor = VOICE_ACTORS.find(va => va.id === persona.voiceActorId);
+      const supportedTones = voiceActor?.supportedEmotionTones || ['normal-1'];
+      
       // 감정톤 결정
       let emotionTone = settings.emotionTone;
       if (emotionTone === 'auto') {
         updateStatus('감정톤을 분석중입니다...');
-        emotionTone = await getEmotionTone(settings.openaiKey, aiResponse, newHistory);
+        emotionTone = await getEmotionTone(settings.openaiKey, aiResponse, newHistory, supportedTones);
+      }
+      
+      // 지원되지 않는 감정톤인 경우 기본값으로 변경
+      if (!supportedTones.includes(emotionTone)) {
+        emotionTone = supportedTones[0];
       }
       
       updateStatus('음성을 재생중입니다...');

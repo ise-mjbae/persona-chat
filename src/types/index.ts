@@ -39,6 +39,7 @@ export interface VoiceActor {
   id: string;
   name: string;
   gender: Gender;
+  supportedEmotionTones: string[];
 }
 
 export interface Persona {
@@ -83,12 +84,42 @@ export interface Learning {
 
 // 상수들
 export const VOICE_ACTORS: VoiceActor[] = [
-  { id: '6596849ea3ecaa12a8b13989', name: '봉규', gender: '남성' },
-  { id: '6335062fd260d463f7d7abb9', name: '현주', gender: '여성' },
-  { id: '618b1849ef7827cfea34ea1e', name: '한준', gender: '남성' },
-  { id: '61e748d0fd9fb2d2cacbb04d', name: '예나', gender: '여성' },
-  { id: '6059dad0b83880769a50502f', name: '박창수(사투리)', gender: '남성' },
-  { id: '60ad08c829e878c3c7d73965', name: '창배 (60대)', gender: '남성' }
+  { 
+    id: '6596849ea3ecaa12a8b13989', 
+    name: '봉규', 
+    gender: '남성',
+    supportedEmotionTones: ['normal-1', 'angry-1']
+  },
+  { 
+    id: '6335062fd260d463f7d7abb9', 
+    name: '현주', 
+    gender: '여성',
+    supportedEmotionTones: ['normal-1', 'angry-1', 'happy-1', 'sad-1']
+  },
+  { 
+    id: '618b1849ef7827cfea34ea1e', 
+    name: '한준', 
+    gender: '남성',
+    supportedEmotionTones: ['normal-1', 'angry-1', 'happy-1', 'sad-1']
+  },
+  { 
+    id: '61e748d0fd9fb2d2cacbb04d', 
+    name: '예나', 
+    gender: '여성',
+    supportedEmotionTones: ['normal-1', 'angry-1', 'happy-1', 'sad-1']
+  },
+  { 
+    id: '6059dad0b83880769a50502f', 
+    name: '박창수(사투리)', 
+    gender: '남성',
+    supportedEmotionTones: ['normal-1', 'angry-1', 'happy-1', 'sad-1']
+  },
+  { 
+    id: '60ad08c829e878c3c7d73965', 
+    name: '창배 (60대)', 
+    gender: '남성',
+    supportedEmotionTones: ['normal-1', 'angry-1', 'happy-1', 'sad-1']
+  }
 ];
 
 export const AGE_GROUPS: AgeGroup[] = [
