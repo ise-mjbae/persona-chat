@@ -65,7 +65,7 @@ const App: React.FC = () => {
       const aiResponse = await callOpenAI(openaiKey, scenario, newHistory);
       addMessage(aiResponse, false);
       
-      const updatedHistory = [...newHistory, { role: 'assistant', content: aiResponse }];
+      const updatedHistory: ConversationHistory[] = [...newHistory, { role: 'assistant', content: aiResponse }];
       setConversationHistory(updatedHistory);
       
       updateStatus('음성을 생성중입니다...');
