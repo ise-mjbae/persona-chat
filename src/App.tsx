@@ -1,4 +1,9 @@
 import React, { useState, useCallback } from 'react';
+import Navigation, { MenuType } from './components/Navigation';
+import LearningPage from './components/LearningPage';
+import PersonaPage from './components/PersonaPage';
+import ManagementPage from './components/ManagementPage';
+import SettingsPage from './components/SettingsPage';
 import Header from './components/Header';
 import Settings from './components/Settings';
 import MessageList from './components/MessageList';
@@ -22,6 +27,7 @@ const initialSettings: SettingsType = {
 };
 
 const App: React.FC = () => {
+  const [activeMenu, setActiveMenu] = useState<MenuType>('learning');
   const [settings, setSettings] = useLocalStorage<SettingsType>('persona-chat-settings', initialSettings);
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationHistory, setConversationHistory] = useState<ConversationHistory[]>([]);
@@ -97,15 +103,27 @@ const App: React.FC = () => {
     }
   }, [settings, conversationHistory, isSpeaking, addMessage, updateStatus]);
 
+  const renderCurrentPage = () => {
+    switch (activeMenu) {
+      case 'learning':
+        return <LearningPage />;
+      case 'persona':
+        return <PersonaPage />;
+      case 'management':
+        return <ManagementPage />;
+      case 'settings':
+        return <SettingsPage settings={settings} onSettingsChange={setSettings} />;
+      default:
+        return <LearningPage />;
+    }
+  };
+
   return (
-    <div className="container">
-      <Header />
-      <Settings settings={settings} onSettingsChange={setSettings} />
-      <div className="chat-container">
-        <MessageList messages={messages} />
-        <MessageInput onSendMessage={handleSendMessage} disabled={isSpeaking} />
-      </div>
-      <StatusBar status={status} isSpeaking={isStatusSpeaking} />
+    <div className="app">
+      <Navigation activeMenu={activeMenu} onMenuChange={setActiveMenu} />
+      <main className="main-content">
+        {renderCurrentPage()}
+      </main>
     </div>
   );
 };
