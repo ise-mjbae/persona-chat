@@ -22,9 +22,14 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ learning, persona, onBack }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [status, setStatus] = useState('메시지를 입력하고 대화를 시작해보세요');
+  const [selectedEmotion, setSelectedEmotion] = useState<string>('auto');
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  // 해당 페르소나의 지원 감정톤 목록
+  const voiceActor = VOICE_ACTORS.find(va => va.id === persona.voiceActorId);
+  const supportedTones = voiceActor?.supportedEmotionTones || ['normal-1'];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -40,12 +45,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ learning, persona, onBack }) => {
     }
   }, [isLoading, isSpeaking]);
 
-  const addMessage = (content: string, isUser: boolean) => {
+  const addMessage = (content: string, isUser: boolean, emotionTone?: string) => {
     const message: Message = {
       id: Date.now().toString(),
       content,
       isUser,
-      timestamp: new Date()
+      timestamp: new Date(),
+      emotionTone
     };
     setMessages(prev => [...prev, message]);
   };
@@ -120,7 +126,6 @@ ${learning.content}
 
       const data = await response.json();
       const aiResponse = data.choices[0].message.content;
-      addMessage(aiResponse, false);
       
       const updatedHistory: ConversationHistory[] = [...newHistory, { role: 'assistant', content: aiResponse }];
       setConversationHistory(updatedHistory);
@@ -128,12 +133,9 @@ ${learning.content}
       updateStatus('음성을 생성중입니다...');
       setIsSpeaking(true);
       
-      // 해당 페르소나의 지원 감정톤 목록 가져오기
-      const voiceActor = VOICE_ACTORS.find(va => va.id === persona.voiceActorId);
-      const supportedTones = voiceActor?.supportedEmotionTones || ['normal-1'];
-      
       // 감정톤 결정
-      let emotionTone = settings.emotionTone;
+      let emotionTone = selectedEmotion || settings.emotionTone || 'auto';
+      
       if (emotionTone === 'auto') {
         updateStatus('감정톤을 분석중입니다...');
         emotionTone = await getEmotionTone(settings.openaiKey, aiResponse, newHistory, supportedTones);
@@ -145,6 +147,9 @@ ${learning.content}
       }
       
       updateStatus('음성을 재생중입니다...');
+      
+      // AI 메시지를 감정톤과 함께 추가
+      addMessage(aiResponse, false, emotionTone);
       
       // 페르소나의 음성 설정 사용
       await generateAndPlayAudio(
@@ -229,6 +234,11 @@ ${learning.content}
                 </div>
                 <div className="bubble-content">
                   <p>{message.content}</p>
+                  {!message.isUser && message.emotionTone && (
+                    <div className="emotion-indicator">
+                      <small>🎤 {message.emotionTone}</small>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -238,6 +248,19 @@ ${learning.content}
       </div>
 
       <div className="chat-input-area">
+        <div className="emotion-selector">
+          <label>감정: </label>
+          <select 
+            value={selectedEmotion} 
+            onChange={(e) => setSelectedEmotion(e.target.value)}
+            disabled={isLoading || isSpeaking}
+          >
+            <option value="auto">자동 분석</option>
+            {supportedTones.map(tone => (
+              <option key={tone} value={tone}>{tone}</option>
+            ))}
+          </select>
+        </div>
         <div className="input-container">
           <input
             ref={inputRef}

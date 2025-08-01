@@ -3,6 +3,7 @@ export interface Message {
   content: string;
   isUser: boolean;
   timestamp: Date;
+  emotionTone?: string;
 }
 
 export interface Settings {
